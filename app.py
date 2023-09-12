@@ -1,7 +1,7 @@
 import streamlit as st
 import pickle
 from main import reccomender
-import requests
+import numpy as np
 
 with open("movies_list.pkl", "rb") as file:
     movies = pickle.load(file)  
@@ -11,18 +11,35 @@ selected_movie = st.selectbox("Select a movie from the dropdown menu",movies['ti
 
 if st.button("Show Recommendation"):
     recommendations,posters = reccomender(selected_movie)  # Assuming this returns a list of movie titles as recommendations
-    columns = st.columns(5)
-
-    for i, recommendations[0] in enumerate(recommendations):
-        with columns[i % 5]:  # Ensure that you don't exceed the number of columns (limit to 5 columns)
+    for i, recommendation in enumerate(recommendations):
+    
+        st.write(recommendation)  # Display the movie title on the left
+        
+        # Create a container next to the title
+        col1, col2 = st.columns([1, 2])
+        
+        # Display the poster in col1
+        with col1:
             st.markdown(
-                f"<div style='display: flex; flex-direction: column; align-items: center;'>"
-                f"    <p style='text-align: center;'>{recommendations[i]}</p>"
-                f"    <div style='margin-top: 10px; text-align: center;'>"
-                f"        <img src='{posters[i]}' style='width: 100%; max-width: 170px;'>"
-                f"    </div>"
-                f"</div>",
-                unsafe_allow_html=True)
-            #st.image(posters[i])
+                f'''<div>
+                        <img src="{posters[i]}" style="width: 50%; max-width: 220px; height: auto;">
+                    </div>
+                ''',
+                unsafe_allow_html=True
+            )
+           
+        
+        # Display the "More Info" button in col2
+        with col2:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="border: 2px solid #FAFAFA;border-radius: 10px; padding: 10px;">
+                        <p>Description: Description for {recommendation}</p>
+                        <p>Release Date: Release date for {recommendation}</p>
+                        <a href="TRAILER_URL">Watch Trailer</a>
+                    </div>
+                    """,
+                    unsafe_allow_html= True)
+        
             
-
