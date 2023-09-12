@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
+import requests
 
 movies = pd.read_csv('movies_dataset.csv') #reads from the csv file
 
@@ -31,14 +32,25 @@ given by the user. Movie_similarity is a matrix where each cell (i, j) contains 
 movie i and movie j, as computed based on their descriptions"""
 movie_similarity = cosine_similarity(vector)
 
+def get_movie_poster(movieID):
+    url = "https://api.themoviedb.org/3/movie//{}?api_key=b6661c17a56ebdaef713ebf2167d0b38".format(movieID)
+    data = requests.get(url)
+    data = data.json()
+    pathToPoster = data['poster_path']
+    fullPathToPoster = "https://image.tmdb.org/t/p/w500/" + pathToPoster
+    return fullPathToPoster
+
 def reccomender(movie):# add case compatability
     id = training_dataframe[training_dataframe['title']== movie].index[0]
     similarity_list = list(enumerate(movie_similarity[id]))
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1], reverse=True)
     recommendation = []
+    posters = []
     for i in sorted_similarity_list[1:6]:
+        id = training_dataframe.loc[i[0]]['id']
         recommendation.append(training_dataframe.loc[i[0]]['title'])
-    return recommendation
+        posters.append(get_movie_poster(id))
+    return recommendation,posters
 
 pickle.dump(training_dataframe, open('movies_list.pkl','wb'))
 pickle.dump(movie_similarity, open('similarity.pkl','wb'))
