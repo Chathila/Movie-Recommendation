@@ -35,8 +35,10 @@ def reccomender(movie):# add case compatability
     id = training_dataframe[training_dataframe['title']== movie].index[0]
     similarity_list = list(enumerate(movie_similarity[id]))
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1], reverse=True)
+    recommendation = []
     for i in sorted_similarity_list[1:6]:
-        print(training_dataframe.loc[i[0]]['title'])
+        recommendation.append(training_dataframe.loc[i[0]]['title'])
+    return recommendation
 
 pickle.dump(training_dataframe, open('movies_list.pkl','wb'))
 pickle.dump(movie_similarity, open('similarity.pkl','wb'))
