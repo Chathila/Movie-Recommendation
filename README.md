@@ -13,3 +13,8 @@ Technologies Used:
 Python, Streamlit, pandas, scikit-learn, CountVectorizer, cosine similarity, external APIs
 
 Instructions:
+
+1. On the first select box, select the a movie that you have previously watched
+2. On the second select box enter the number of recommendations you want to see
+3. Press "Show Recommendation" and the program will show you the recommended movies that is the most similar to the movie you previously entered
+
