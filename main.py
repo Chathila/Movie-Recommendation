@@ -13,6 +13,8 @@ movies_dataframe = movies[['id','title','genre','overview']]
 movies_dataframe['description']= movies_dataframe['overview'] + movies_dataframe['genre']
 training_dataframe = movies_dataframe.drop(columns = ['overview','genre'])
 
+
+
 '''CountVectorizer is a tool for creating a BoW representation of text data.
 max_features=10000 because we have 10000 movies in our dataset
 stop_words='English' removes common English stopwords, which are often discarded in BoW representations'''
@@ -37,23 +39,37 @@ def get_movie_poster(movieID):
     data = requests.get(url)
     data = data.json()
     pathToPoster = data['poster_path']
+    
     fullPathToPoster = "https://image.tmdb.org/t/p/w500/" + pathToPoster
     return fullPathToPoster
 
-def reccomender(movie):# add case compatability
+def get_movie_details(movieID):
+    url = "https://api.themoviedb.org/3/movie//{}?api_key=b6661c17a56ebdaef713ebf2167d0b38".format(movieID)
+    response = requests.get(url)
+    data = response.json()
+    genresAPI = data.get("genres")
+    genres = [genre["name"] for genre in genresAPI]
+    releaseDate = data.get("release_date")
+    matching_movie = movies_dataframe[movies_dataframe['id'] == movieID]
+    description = matching_movie.iloc[0]['overview']
+    return genres, releaseDate, description
+    
+def reccomender(movie,numRecommendations):
     id = training_dataframe[training_dataframe['title']== movie].index[0]
     similarity_list = list(enumerate(movie_similarity[id]))
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1], reverse=True)
     recommendation = []
     posters = []
-    for i in sorted_similarity_list[1:6]:
+    movie_ids = []
+    for i in sorted_similarity_list[1:numRecommendations+1]:
         id = training_dataframe.loc[i[0]]['id']
+        movie_ids.append(id)
         recommendation.append(training_dataframe.loc[i[0]]['title'])
         posters.append(get_movie_poster(id))
-    return recommendation,posters
+    return recommendation,posters,movie_ids
 
 pickle.dump(training_dataframe, open('movies_list.pkl','wb'))
-pickle.dump(movie_similarity, open('similarity.pkl','wb'))
+
 
 
 
