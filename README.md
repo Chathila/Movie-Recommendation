@@ -1,6 +1,6 @@
 FILM SUGGESTER- PYTHON WEB APP
 
-webpage - https://chathila-movie-recommendation-app-sai9as.streamlit.app
+webpage - https://filmsuggester.streamlit.app
 
 Description:
 
