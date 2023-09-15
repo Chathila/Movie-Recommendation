@@ -15,7 +15,7 @@ numRecommendations = st.selectbox("Type in the number of recommendations you nee
 if st.button("Show Recommendation"):
     recommendations,posters, recommended_IDs = reccomender(selected_movie, numRecommendations)  # Assuming this returns a list of movie titles as recommendations
 
-    st.markdown(f"<p style='font-size: px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;'>Showing movies similar to : {selected_movie}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='font-size: 30px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;'>Showing movies similar to : {selected_movie}</p>", unsafe_allow_html=True)
 
     for  i, recommendation in enumerate(recommendations):
     
@@ -29,7 +29,7 @@ if st.button("Show Recommendation"):
         with col1:
             st.markdown(
                 f'''<div>
-                        <img src="{posters[i]}" style="width: 100%; max-width: 300px; height: auto;">
+                        <img src="{posters[i]}" style="width: 100%; max-width: 250px; height: auto;">
                     </div>
                 ''',
                 unsafe_allow_html=True
@@ -45,7 +45,7 @@ if st.button("Show Recommendation"):
             with st.container():
                 st.markdown(
                     f"""
-                    <div style="border: 4px solid #FAFAFA;border-radius: 10px; padding: 10px;">
+                    <div style="border: 4px solid #FAFAFA;border-radius: 10px; padding: 10px;background-color: #262730;">
                         <p style='font-size: 22px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;'>Release Date: <p> {releaseDate}</p>
                         <p style='font-size: 22px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;'> Genres: <p> {genre_string}</p>
                         <p style='font-size: 22px; font-weight: bold;margin-bottom: 10px;margin-top: 20px;'>Description:<p> {description}</p>
